@@ -1,0 +1,5 @@
+linux-generic-hwe-22.04
+linux-firmware
+xserver-xorg-input-libinput
+xserver-xorg-input-synaptics
+i2c-tools

@@ -1,0 +1,51 @@
+Download supporting tools (deb packages) for offiine installation
+These packages (including their dependencies) are needed:
+sudo apt-rdepends binfmt-support | grep -v "^\s" | xargs apt-get download
+sudo apt-rdepends qemu-user-static | grep -v "^\s" | xargs apt-get download
+
+=================
+qemu-user-static
+=================
+qemu-user-static_1%3a4.2-3ubuntu6.30_amd64.deb
+
+=================
+binfmt-support
+=================
+binfmt-support_2.2.0-2_amd64.deb
+gcc-10-base_10.5.0-1ubuntu1~20.04_amd64.deb
+libc6_2.31-0ubuntu9.18_amd64.deb
+libcrypt1_1%3a4.4.10-10ubuntu4_amd64.deb
+libgcc-s1_10.5.0-1ubuntu1~20.04_amd64.deb
+libpipeline1_1.5.2-2build1_amd64.deb
+lsb-base_11.1.0ubuntu2_all.deb
+
+Go to https://archive.ubuntu.com/ubuntu/dists/ and download Packages.gz
+To know which distribution to go to, use 'apt policy <pacakage name>'
+
+$ apt policy binfmt-support
+binfmt-support:
+  Installed: 2.2.0-2
+  Candidate: 2.2.0-2
+  Version table:
+ *** 2.2.0-2 500
+        500 http://us.archive.ubuntu.com/ubuntu focal/universe amd64 Packages
+        100 /var/lib/dpkg/status
+
+$ apt policy qemu-user-static
+qemu-user-static:
+  Installed: 1:4.2-3ubuntu6.30
+  Candidate: 1:4.2-3ubuntu6.30
+  Version table:
+ *** 1:4.2-3ubuntu6.30 500
+        500 http://us.archive.ubuntu.com/ubuntu focal-updates/universe amd64 Packages
+        500 http://security.ubuntu.com/ubuntu focal-security/universe amd64 Packages
+        100 /var/lib/dpkg/status
+     1:4.2-3ubuntu6 500
+        500 http://us.archive.ubuntu.com/ubuntu focal/universe amd64 Packages
+
+So you can go to focal-updates/universe/binary-amd64/Packages.gz
+Unzip Packages.gz and search for the hash of the package that matches the list above.
+
+To install, execute:
+dpkg -i *.deb
+

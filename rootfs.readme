@@ -1,0 +1,38 @@
+1) Download arm64 root filesystem and its signature files for verification from https://cdimage.ubuntu.com/ubuntu-base/releases/20.04.5/release/
+wget https://cdimage.ubuntu.com/ubuntu-base/releases/20.04.5/release/ubuntu-base-20.04.5-base-arm64.tar.gz
+wget https://cdimage.ubuntu.com/ubuntu-base/releases/20.04.5/release/SHA256SUMS
+wget https://cdimage.ubuntu.com/ubuntu-base/releases/20.04.5/release/SHA256SUMS.gpg
+
+2) Verify the downloads in step 1. Refer to https://documentation.ubuntu.com/security/docs/software-integrity/image-verification/ for details.
+
+curl -o ubuntu.gpg "https://archive.ubuntu.com/ubuntu/project/ubuntu-archive-keyring.gpg"
+-> ubuntu.gpg is downloaded.
+
+gpg --no-default-keyring --keyring ./ubuntu.gpg --list-keys
+-> Check the fingerprints printed out are same as the ones shown in "Step 2 -> Fingerprint comparison" in "https://documentation.ubuntu.com/security/docs/software-integrity/image-verification/"
+
+-OR-
+
+-> Use "Under Step 2 -> Trusted Debian/Ubuntu system".Use a trusted ubuntu system and anchor the trust in the public key found at /usr/share/keyrings/ubuntu-archive-keyring.gpg that can be installed with:
+apt install ubuntu-archive-keyring
+The two keys can be compared using the following command, which must NOT print anything:
+# This command must not print anything
+# Prints "gpg: error reading key: No public key" for each key that isn't in that keyring.
+$ gpg --quiet --with-colons --no-default-keyring --keyring ./ubuntu.gpg --list-keys 2>/dev/null | awk -F: '$1 == "fpr" { print $10 }' | xargs gpg --no-default-keyring --list-keys --keyring /usr/share/keyrings/ubuntu-archive-keyring.gpg >/dev/null
+
+
+$ gpgv --keyring ./ubuntu.gpg ./SHA256SUMS.gpg ./SHA256SUMS
+sha256sum -c --ignore-missing ./SHA256SUMS
+
+If no errors, the downloaded rootfs is verified to be authentic from Canonical.
+
+To install a rootfs that you have downloaded e.g. file.tar.gz
+- mkdir -p /opt/rootfs
+- copy file.tar.gz to /opt/rootfs
+- cd /opt/rootfs
+- tar xvzf file.tar.gz
+- you now have a rootfs to chroot to
+
+To chroot
+- chroot /opt/rootfs /bin/bash (this will be also be handled by gen_pe.sh)
+
